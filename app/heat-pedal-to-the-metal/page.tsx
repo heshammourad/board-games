@@ -146,7 +146,7 @@ export default function Page() {
             <AccordionDetails>
               <Grid container spacing={2}>
                 {TRACKS.map((track) => (
-                  <Grid item xs={6} sm={4} key={track}>
+                  <Grid size={{xs: 6, sm: 4}} key={track}>
                     <Button
                       variant={
                         selectedTrack === track ? 'contained' : 'outlined'
@@ -157,7 +157,7 @@ export default function Page() {
                     </Button>
                   </Grid>
                 ))}
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <Button
                     variant="outlined"
                     fullWidth
@@ -199,7 +199,7 @@ export default function Page() {
               <Stack spacing={3}>
                 <Typography>Use Weather & Road Conditions Module?</Typography>
                 <Grid container spacing={2}>
-                  <Grid item xs={6}>
+                  <Grid size={6}>
                     <Button
                       variant="contained"
                       fullWidth
@@ -207,7 +207,7 @@ export default function Page() {
                       Yes
                     </Button>
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid size={6}>
                     <Button
                       variant="outlined"
                       fullWidth
