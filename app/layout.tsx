@@ -27,7 +27,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    template: 'Board Game Tools - %s',
+    template: '%s | Board Game Tools',
     default: 'Board Game Tools',
   },
   description: 'Utilities to help set up and score board games.',

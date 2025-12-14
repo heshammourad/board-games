@@ -12,16 +12,13 @@ import Typography from '@mui/material/Typography';
 import Link from './components/Link';
 
 const games = [
+  {name: '7 Wonders', url: '7-wonders', bggId: '68448'},
   {
     name: 'Heat: Pedal to the Metal',
     url: 'heat-pedal-to-the-metal',
     bggId: '366013',
   },
-  {
-    name: 'Quacks',
-    url: 'quacks',
-    bggId: '244521',
-  },
+  {name: 'Quacks', url: 'quacks', bggId: '244521'},
 ];
 
 games.sort((a, b) => a.name.localeCompare(b.name, 'en', {numeric: true}));

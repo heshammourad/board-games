@@ -15,7 +15,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import {useState} from 'react';
 
-import {pickMany, pickOne} from '../../utils/random';
+import {pickMany, pickOne, shuffle} from '../../utils/random';
 import GamePageLayout from '../components/GamePageLayout';
 
 const TRACKS = ['France', 'Great Britain', 'Italy', 'Japan', 'Mexico', 'USA'];
@@ -106,7 +106,7 @@ export default function Page() {
   };
 
   const handleRandomizeOrder = () => {
-    setPlayerOrder(pickMany(selectedColors, selectedColors.length));
+    setPlayerOrder(shuffle(selectedColors));
     setExpanded(false);
   };
 
