@@ -17,6 +17,11 @@ const games = [
     url: 'heat-pedal-to-the-metal',
     bggId: '366013',
   },
+  {
+    name: 'Quacks',
+    url: 'quacks',
+    bggId: '244521',
+  },
 ];
 
 games.sort((a, b) => a.name.localeCompare(b.name, 'en', {numeric: true}));

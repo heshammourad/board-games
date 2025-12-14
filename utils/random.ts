@@ -11,3 +11,7 @@ export function pickMany<T>(items: T[], count: number): T[] {
   }
   return shuffled.slice(0, count);
 }
+
+export function randomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}

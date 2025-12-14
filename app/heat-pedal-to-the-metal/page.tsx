@@ -13,10 +13,10 @@ import FormGroup from '@mui/material/FormGroup';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Link from 'next/link';
 import {useState} from 'react';
 
 import {pickMany, pickOne} from '../../utils/random';
+import GamePageLayout from '../components/GamePageLayout';
 
 const TRACKS = ['France', 'Great Britain', 'Italy', 'Japan', 'Mexico', 'USA'];
 const WEATHER_TOKENS = ['Sunny', 'Overcast', 'Showers', 'Rain', 'Snow', 'Fog'];
@@ -115,209 +115,183 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-50 p-8 font-sans dark:bg-black dark:text-zinc-100">
-      <main className="mx-auto max-w-3xl">
-        <div className="mb-6">
-          <Link
-            href="/"
-            className="text-sm font-medium text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
-            &larr; Back to Games
-          </Link>
-        </div>
-        <h1 className="mb-8 text-4xl font-bold tracking-tight">
-          Heat: Pedal to the Metal Setup
-        </h1>
-
-        <div className="space-y-4">
-          <Accordion
-            expanded={expanded === 'panel1'}
-            onChange={handleAccordionChange('panel1')}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1bh-content"
-              id="panel1bh-header">
-              <Typography sx={{width: '33%', flexShrink: 0}}>
-                1. Select Track
-              </Typography>
-              <Typography sx={{color: 'text.secondary'}}>
-                {selectedTrack}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container spacing={2}>
-                {TRACKS.map((track) => (
-                  <Grid size={{xs: 6, sm: 4}} key={track}>
-                    <Button
-                      variant={
-                        selectedTrack === track ? 'contained' : 'outlined'
-                      }
-                      fullWidth
-                      onClick={() => handleTrackSelect(track)}>
-                      {track}
-                    </Button>
-                  </Grid>
-                ))}
-                <Grid size={12}>
-                  <Button
-                    variant="outlined"
-                    fullWidth
-                    onClick={pickRandomTrack}
-                    color="inherit">
-                    🎲 Random Track
-                  </Button>
-                </Grid>
+    <GamePageLayout title="Heat: Pedal to the Metal">
+      <Accordion
+        expanded={expanded === 'panel1'}
+        onChange={handleAccordionChange('panel1')}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1bh-content"
+          id="panel1bh-header">
+          <Typography sx={{width: '33%', flexShrink: 0}}>
+            1. Select Track
+          </Typography>
+          <Typography sx={{color: 'text.secondary'}}>
+            {selectedTrack}
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Grid container spacing={2}>
+            {TRACKS.map((track) => (
+              <Grid size={{xs: 6, sm: 4}} key={track}>
+                <Button
+                  variant={selectedTrack === track ? 'contained' : 'outlined'}
+                  fullWidth
+                  onClick={() => handleTrackSelect(track)}>
+                  {track}
+                </Button>
               </Grid>
-            </AccordionDetails>
-          </Accordion>
+            ))}
+            <Grid size={12}>
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={pickRandomTrack}
+                color="inherit">
+                🎲 Random Track
+              </Button>
+            </Grid>
+          </Grid>
+        </AccordionDetails>
+      </Accordion>
 
-          <Accordion
-            expanded={expanded === 'panel2'}
-            onChange={handleAccordionChange('panel2')}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2bh-content"
-              id="panel2bh-header">
-              <Typography sx={{width: '33%', flexShrink: 0}}>
-                2. Weather & Road
-              </Typography>
-              <Typography
-                sx={{
-                  color: 'text.secondary',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                  mr: 2,
-                }}>
-                {weatherModule === true
-                  ? `${weatherToken} | ${roadConditions.join(', ')}`
-                  : weatherModule === false
-                    ? 'Skipped'
-                    : ''}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Stack spacing={3}>
-                <Typography>Use Weather & Road Conditions Module?</Typography>
-                <Grid container spacing={2}>
-                  <Grid size={6}>
-                    <Button
-                      variant="contained"
-                      fullWidth
-                      onClick={() => handleWeatherSelect(true)}>
-                      Yes
-                    </Button>
-                  </Grid>
-                  <Grid size={6}>
-                    <Button
-                      variant="outlined"
-                      fullWidth
-                      onClick={() => handleWeatherSelect(false)}>
-                      No
-                    </Button>
-                  </Grid>
-                </Grid>
-                {weatherModule && (
-                  <Stack spacing={2}>
-                    <Typography variant="subtitle2">Result:</Typography>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <Typography variant="body2">Weather:</Typography>
-                      <Chip label={weatherToken} color="primary" />
-                    </Stack>
-                    <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 1}}>
-                      <Typography variant="body2" sx={{width: '100%'}}>
-                        Road Conditions:
-                      </Typography>
-                      {roadConditions.map((rc, i) => (
-                        <Chip
-                          key={i}
-                          label={rc}
-                          size="small"
-                          variant="outlined"
-                        />
-                      ))}
-                    </Box>
-                  </Stack>
-                )}
-              </Stack>
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion
-            expanded={expanded === 'panel3'}
-            onChange={handleAccordionChange('panel3')}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel3bh-content"
-              id="panel3bh-header">
-              <Typography sx={{width: '33%', flexShrink: 0}}>
-                3. Player Order
-              </Typography>
-              <Typography sx={{color: 'text.secondary'}}>
-                {playerOrder.length > 0 ? playerOrder.join(', ') : ''}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Stack spacing={2}>
-                <Typography>Select Colors (Min 2):</Typography>
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={selectedColors.length === PLAYER_COLORS.length}
-                        indeterminate={
-                          selectedColors.length > 0 &&
-                          selectedColors.length < PLAYER_COLORS.length
-                        }
-                        onChange={handleSelectAllColors}
-                      />
-                    }
-                    label="Select All"
-                  />
-                </FormGroup>
-                <FormGroup row>
-                  {PLAYER_COLORS.map((color) => (
-                    <FormControlLabel
-                      key={color}
-                      control={
-                        <Checkbox
-                          checked={selectedColors.includes(color)}
-                          onChange={() => handleColorToggle(color)}
-                        />
-                      }
-                      label={color}
-                    />
-                  ))}
-                </FormGroup>
+      <Accordion
+        expanded={expanded === 'panel2'}
+        onChange={handleAccordionChange('panel2')}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel2bh-content"
+          id="panel2bh-header">
+          <Typography sx={{width: '33%', flexShrink: 0}}>
+            2. Weather & Road
+          </Typography>
+          <Typography
+            sx={{
+              color: 'text.secondary',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              mr: 2,
+            }}>
+            {weatherModule === true
+              ? `${weatherToken} | ${roadConditions.join(', ')}`
+              : weatherModule === false
+                ? 'Skipped'
+                : ''}
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Stack spacing={3}>
+            <Typography>Use Weather & Road Conditions Module?</Typography>
+            <Grid container spacing={2}>
+              <Grid size={6}>
                 <Button
                   variant="contained"
-                  disabled={selectedColors.length < 2}
-                  onClick={handleRandomizeOrder}>
-                  Randomize Order
+                  fullWidth
+                  onClick={() => handleWeatherSelect(true)}>
+                  Yes
                 </Button>
-                {playerOrder.length > 0 && (
-                  <Stack spacing={1}>
-                    <Typography variant="subtitle2">Turn Order:</Typography>
-                    <Stack
-                      direction="row"
-                      spacing={1}
-                      flexWrap="wrap"
-                      useFlexGap>
-                      {playerOrder.map((color, index) => (
-                        <Chip
-                          key={color}
-                          label={`${index + 1}. ${color}`}
-                          color="primary"
-                          variant="outlined"
-                        />
-                      ))}
-                    </Stack>
-                  </Stack>
-                )}
+              </Grid>
+              <Grid size={6}>
+                <Button
+                  variant="outlined"
+                  fullWidth
+                  onClick={() => handleWeatherSelect(false)}>
+                  No
+                </Button>
+              </Grid>
+            </Grid>
+            {weatherModule && (
+              <Stack spacing={2}>
+                <Typography variant="subtitle2">Result:</Typography>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <Typography variant="body2">Weather:</Typography>
+                  <Chip label={weatherToken} color="primary" />
+                </Stack>
+                <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 1}}>
+                  <Typography variant="body2" sx={{width: '100%'}}>
+                    Road Conditions:
+                  </Typography>
+                  {roadConditions.map((rc, i) => (
+                    <Chip key={i} label={rc} size="small" variant="outlined" />
+                  ))}
+                </Box>
               </Stack>
-            </AccordionDetails>
-          </Accordion>
-        </div>
-      </main>
-    </div>
+            )}
+          </Stack>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion
+        expanded={expanded === 'panel3'}
+        onChange={handleAccordionChange('panel3')}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel3bh-content"
+          id="panel3bh-header">
+          <Typography sx={{width: '33%', flexShrink: 0}}>
+            3. Player Order
+          </Typography>
+          <Typography sx={{color: 'text.secondary'}}>
+            {playerOrder.length > 0 ? playerOrder.join(', ') : ''}
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Stack spacing={2}>
+            <Typography>Select Colors (Min 2):</Typography>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedColors.length === PLAYER_COLORS.length}
+                    indeterminate={
+                      selectedColors.length > 0 &&
+                      selectedColors.length < PLAYER_COLORS.length
+                    }
+                    onChange={handleSelectAllColors}
+                  />
+                }
+                label="Select All"
+              />
+            </FormGroup>
+            <FormGroup row>
+              {PLAYER_COLORS.map((color) => (
+                <FormControlLabel
+                  key={color}
+                  control={
+                    <Checkbox
+                      checked={selectedColors.includes(color)}
+                      onChange={() => handleColorToggle(color)}
+                    />
+                  }
+                  label={color}
+                />
+              ))}
+            </FormGroup>
+            <Button
+              variant="contained"
+              disabled={selectedColors.length < 2}
+              onClick={handleRandomizeOrder}>
+              Randomize Order
+            </Button>
+            {playerOrder.length > 0 && (
+              <Stack spacing={1}>
+                <Typography variant="subtitle2">Turn Order:</Typography>
+                <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                  {playerOrder.map((color, index) => (
+                    <Chip
+                      key={color}
+                      label={`${index + 1}. ${color}`}
+                      color="primary"
+                      variant="outlined"
+                    />
+                  ))}
+                </Stack>
+              </Stack>
+            )}
+          </Stack>
+        </AccordionDetails>
+      </Accordion>
+    </GamePageLayout>
   );
 }
