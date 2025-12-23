@@ -15,8 +15,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import {useState} from 'react';
 
+import GamePageLayout from '../../components/GamePageLayout';
 import {pickMany, pickOne, shuffle} from '../../utils/random';
-import GamePageLayout from '../components/GamePageLayout';
 
 const TRACKS = ['France', 'Great Britain', 'Italy', 'Japan', 'Mexico', 'USA'];
 const WEATHER_TOKENS = ['Sunny', 'Overcast', 'Showers', 'Rain', 'Snow', 'Fog'];

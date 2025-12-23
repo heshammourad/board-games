@@ -8,8 +8,9 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import Image from 'next/image';
 
-import Link from './components/Link';
+import Link from '../components/Link';
 
 const games = [
   {name: '7 Wonders', url: '7-wonders', bggId: '68448'},
@@ -19,6 +20,7 @@ const games = [
     bggId: '366013',
   },
   {name: 'Quacks', url: 'quacks', bggId: '244521'},
+  {name: 'Wyrmspan', url: 'wyrmspan', bggId: '410201'},
 ];
 
 games.sort((a, b) => a.name.localeCompare(b.name, 'en', {numeric: true}));
@@ -92,6 +94,16 @@ export default async function Home() {
             </Paper>
           ))}
         </List>
+        <Box
+          component="footer"
+          sx={{mt: 6, display: 'flex', justifyContent: 'center'}}>
+          <Image
+            src="/powered-by-bgg-reversed-rgb.svg"
+            alt="Powered by BoardGameGeek"
+            width={200}
+            height={44}
+          />
+        </Box>
       </Container>
     </Box>
   );

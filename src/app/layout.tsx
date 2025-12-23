@@ -5,7 +5,7 @@ import type {Metadata} from 'next';
 import {Geist, Geist_Mono} from 'next/font/google';
 import {Roboto} from 'next/font/google';
 
-import theme from '../theme';
+import theme from '../../theme';
 import './globals.css';
 
 const roboto = Roboto({

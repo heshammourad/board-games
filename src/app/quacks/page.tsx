@@ -14,8 +14,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import {SyntheticEvent, useState} from 'react';
 
+import GamePageLayout from '../../components/GamePageLayout';
 import {pickMany, pickOne, randomInt} from '../../utils/random';
-import GamePageLayout from '../components/GamePageLayout';
 
 const HERB_WITCHES = {
   'Silver': [
