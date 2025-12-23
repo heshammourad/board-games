@@ -24,21 +24,28 @@ const games = [
 games.sort((a, b) => a.name.localeCompare(b.name, 'en', {numeric: true}));
 
 async function getGameImages(ids: string[]) {
-  // const idString = ids.join(',');
-  // const res = await fetch(`https://boardgamegeek.com/xmlapi2/thing?id=${idString}`);
-  // const text = await res.text();
+  const idString = ids.join(',');
+  const res = await fetch(
+    `https://boardgamegeek.com/xmlapi2/thing?id=${idString}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.BGG_API_TOKEN}`,
+      },
+    },
+  );
+  const text = await res.text();
 
   const images: Record<string, string> = {};
 
   // Basic XML parsing to avoid external dependencies
-  // const items = text.split('<item type="boardgame"');
-  // items.forEach((item) => {
-  //   const idMatch = item.match(/id="(\d+)"/);
-  //   const thumbMatch = item.match(/<thumbnail>(.*?)<\/thumbnail>/);
-  //   if (idMatch && thumbMatch) {
-  //     images[idMatch[1]] = thumbMatch[1];
-  //   }
-  // });
+  const items = text.split('<item type="boardgame"');
+  items.forEach((item) => {
+    const idMatch = item.match(/id="(\d+)"/);
+    const thumbMatch = item.match(/<thumbnail>(.*?)<\/thumbnail>/);
+    if (idMatch && thumbMatch) {
+      images[idMatch[1]] = thumbMatch[1];
+    }
+  });
 
   return images;
 }
@@ -67,15 +74,15 @@ export default async function Home() {
             <Paper key={game.name} variant="outlined" sx={{overflow: 'hidden'}}>
               <ListItem disablePadding>
                 <ListItemButton component={Link} href={game.url} sx={{p: 2}}>
-                  {/* {images[game.bggId] && (
-                    <ListItemAvatar sx={{ mr: 2 }}>
+                  {images[game.bggId] && (
+                    <ListItemAvatar sx={{mr: 2}}>
                       <Avatar
                         src={images[game.bggId]}
                         variant="rounded"
-                        sx={{ width: 64, height: 64 }}
+                        sx={{width: 64, height: 64}}
                       />
                     </ListItemAvatar>
-                  )} */}
+                  )}
                   <ListItemText
                     primary={game.name}
                     primaryTypographyProps={{variant: 'h6', fontWeight: 'bold'}}
