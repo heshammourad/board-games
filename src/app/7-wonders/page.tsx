@@ -507,6 +507,7 @@ export default function Page() {
                       sx={{
                         borderBottom: '3px double black',
                         bgcolor: 'grey.300',
+                        fontFamily: 'sans-serif !important',
                       }}
                     />
                     {players.map((p, i) => (
@@ -626,7 +627,12 @@ export default function Page() {
                     },
                   ].map((row, idx) => (
                     <TableRow key={idx}>
-                      <TableCell align="center" sx={{bgcolor: 'grey.300'}}>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          bgcolor: 'grey.300',
+                          fontFamily: 'sans-serif !important',
+                        }}>
                         {row.icon}
                       </TableCell>
                       {row.values.map((val, i) => (
@@ -647,6 +653,7 @@ export default function Page() {
                         fontWeight: 'bold',
                         fontSize: '1.2rem',
                         bgcolor: 'grey.300',
+                        fontFamily: 'sans-serif !important',
                       }}>
                       Σ
                     </TableCell>
