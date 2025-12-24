@@ -30,6 +30,7 @@ import GamePageLayout from '../../components/GamePageLayout';
 import PlayerSetup, {Player} from '../../components/PlayerSetup';
 import ScoreInput from '../../components/ScoreInput';
 import ScoreSheet, {ScoreResult} from '../../components/ScoreSheet';
+import ScoringSection from '../../components/ScoringSection';
 import {useScores} from '../../hooks/useScores';
 import {pickOne, shuffle} from '../../utils/random';
 
@@ -329,45 +330,25 @@ export default function Page() {
           <Typography sx={{width: '33%', flexShrink: 0}}>3. Scoring</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography variant="h6">3a. Military Conflicts</Typography>
-          <Typography sx={{color: 'text.secondary', mb: 2}}>
-            Each player adds their Victory and Defeat tokens (this total can be
-            negative!).
-          </Typography>
-          <Stack spacing={2}>
-            {players.map((player, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                alignItems="center"
-                spacing={2}>
-                <Typography sx={{width: 120, flexShrink: 0}}>
-                  {player.name}
-                </Typography>
-                <ScoreInput
-                  value={military.scores[index] || ''}
-                  onChange={(val) => military.handleChange(index, val)}
-                  slotProps={{htmlInput: {min: -6, max: 18}}}
-                />
-              </Stack>
-            ))}
-          </Stack>
-          <Typography variant="h6" sx={{mt: 3}}>
-            3b. Treasury Contents
-          </Typography>
-          <Typography sx={{color: 'text.secondary', mb: 2}}>
-            Enter the number of coins you have. (1 point per 3 coins)
-          </Typography>
-          <Stack spacing={2}>
-            {players.map((player, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                alignItems="center"
-                spacing={2}>
-                <Typography sx={{width: 120, flexShrink: 0}}>
-                  {player.name}
-                </Typography>
+          <ScoringSection
+            title="3a. Military Conflicts"
+            description="Each player adds their Victory and Defeat tokens (this total can be negative!)."
+            players={players}
+            sx={{mt: 0}}>
+            {(_, index) => (
+              <ScoreInput
+                value={military.scores[index] || ''}
+                onChange={(val) => military.handleChange(index, val)}
+                slotProps={{htmlInput: {min: -6, max: 18}}}
+              />
+            )}
+          </ScoringSection>
+          <ScoringSection
+            title="3b. Treasury Contents"
+            description="Enter the number of coins you have. (1 point per 3 coins)"
+            players={players}>
+            {(_, index) => (
+              <>
                 <ScoreInput
                   value={treasury.scores[index] || ''}
                   onChange={(val) => treasury.handleChange(index, val)}
@@ -377,106 +358,76 @@ export default function Page() {
                 <Typography>
                   {Math.floor(treasury.numericScores[index] / 3)} points
                 </Typography>
+              </>
+            )}
+          </ScoringSection>
+          <ScoringSection
+            title="3c. Wonder"
+            description="Each player then adds to their score the victory points from their wonder."
+            players={players}>
+            {(_, index) => (
+              <ScoreInput
+                value={wonder.scores[index] || ''}
+                onChange={(val) => wonder.handleChange(index, val)}
+                slotProps={{htmlInput: {min: 0, max: 20}}}
+              />
+            )}
+          </ScoringSection>
+          <ScoringSection
+            title="3d. Civilian Structures"
+            description="Each player adds the victory points of their Civilian structures. This amount is indicated on each Civilian structure."
+            players={players}>
+            {(_, index) => (
+              <ScoreInput
+                value={civilian.scores[index] || ''}
+                onChange={(val) => civilian.handleChange(index, val)}
+                slotProps={{htmlInput: {min: 0}}}
+              />
+            )}
+          </ScoringSection>
+          <ScoringSection
+            title="3e. Scientific Structures"
+            description="Enter the number of scientific symbols."
+            players={players}
+            header={
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <Typography sx={{width: 120, flexShrink: 0}} />
+                <Box
+                  sx={{width: 60, display: 'flex', justifyContent: 'center'}}>
+                  <Image
+                    src="/7-wonders/tablet.jpg"
+                    alt="Tablet"
+                    width={24}
+                    height={24}
+                  />
+                </Box>
+                <Box
+                  sx={{width: 60, display: 'flex', justifyContent: 'center'}}>
+                  <Image
+                    src="/7-wonders/gear.jpg"
+                    alt="Gear"
+                    width={24}
+                    height={24}
+                  />
+                </Box>
+                <Box
+                  sx={{width: 60, display: 'flex', justifyContent: 'center'}}>
+                  <Image
+                    src="/7-wonders/compass.jpg"
+                    alt="Compass"
+                    width={24}
+                    height={24}
+                  />
+                </Box>
+                <Box
+                  sx={{width: 60, display: 'flex', justifyContent: 'center'}}>
+                  <Typography>❓</Typography>
+                </Box>
+                <Typography>Total</Typography>
               </Stack>
-            ))}
-          </Stack>
-          <Typography variant="h6" sx={{mt: 3}}>
-            3c. Wonder
-          </Typography>
-          <Typography sx={{color: 'text.secondary', mb: 2}}>
-            Each player then adds to their score the victory points from their
-            wonder.
-          </Typography>
-          <Stack spacing={2}>
-            {players.map((player, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                alignItems="center"
-                spacing={2}>
-                <Typography sx={{width: 120, flexShrink: 0}}>
-                  {player.name}
-                </Typography>
-                <ScoreInput
-                  value={wonder.scores[index] || ''}
-                  onChange={(val) => wonder.handleChange(index, val)}
-                  slotProps={{htmlInput: {min: 0, max: 20}}}
-                />
-              </Stack>
-            ))}
-          </Stack>
-          <Typography variant="h6" sx={{mt: 3}}>
-            3d. Civilian Structures
-          </Typography>
-          <Typography sx={{color: 'text.secondary', mb: 2}}>
-            Each player adds the victory points of their Civilian structures.
-            This amount is indicated on each Civilian structure.
-          </Typography>
-          <Stack spacing={2}>
-            {players.map((player, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                alignItems="center"
-                spacing={2}>
-                <Typography sx={{width: 120, flexShrink: 0}}>
-                  {player.name}
-                </Typography>
-                <ScoreInput
-                  value={civilian.scores[index] || ''}
-                  onChange={(val) => civilian.handleChange(index, val)}
-                  slotProps={{htmlInput: {min: 0}}}
-                />
-              </Stack>
-            ))}
-          </Stack>
-          <Typography variant="h6" sx={{mt: 3}}>
-            3e. Scientific Structures
-          </Typography>
-          <Typography sx={{color: 'text.secondary', mb: 2}}>
-            Enter the number of scientific symbols.
-          </Typography>
-          <Stack spacing={2}>
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <Typography sx={{width: 120, flexShrink: 0}} />
-              <Box sx={{width: 60, display: 'flex', justifyContent: 'center'}}>
-                <Image
-                  src="/7-wonders/tablet.jpg"
-                  alt="Tablet"
-                  width={24}
-                  height={24}
-                />
-              </Box>
-              <Box sx={{width: 60, display: 'flex', justifyContent: 'center'}}>
-                <Image
-                  src="/7-wonders/gear.jpg"
-                  alt="Gear"
-                  width={24}
-                  height={24}
-                />
-              </Box>
-              <Box sx={{width: 60, display: 'flex', justifyContent: 'center'}}>
-                <Image
-                  src="/7-wonders/compass.jpg"
-                  alt="Compass"
-                  width={24}
-                  height={24}
-                />
-              </Box>
-              <Box sx={{width: 60, display: 'flex', justifyContent: 'center'}}>
-                <Typography>❓</Typography>
-              </Box>
-              <Typography>Total</Typography>
-            </Stack>
-            {players.map((player, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                alignItems="center"
-                spacing={2}>
-                <Typography sx={{width: 120, flexShrink: 0}}>
-                  {player.name}
-                </Typography>
+            }>
+            {(_, index) => (
+              <>
                 <ScoreInput
                   sx={{width: 60}}
                   value={scienceTablet.scores[index] || ''}
@@ -509,57 +460,33 @@ export default function Page() {
                     scienceWildcard.numericScores[index],
                   )}
                 </Typography>
-              </Stack>
-            ))}
-          </Stack>
-          <Typography variant="h6" sx={{mt: 3}}>
-            3f. Commercial Structures
-          </Typography>
-          <Typography sx={{color: 'text.secondary', mb: 2}}>
-            Some commercial structures from Age III grant victory points.
-          </Typography>
-          <Stack spacing={2}>
-            {players.map((player, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                alignItems="center"
-                spacing={2}>
-                <Typography sx={{width: 120, flexShrink: 0}}>
-                  {player.name}
-                </Typography>
-                <ScoreInput
-                  value={commercial.scores[index] || ''}
-                  onChange={(val) => commercial.handleChange(index, val)}
-                  slotProps={{htmlInput: {min: 0}}}
-                />
-              </Stack>
-            ))}
-          </Stack>
-          <Typography variant="h6" sx={{mt: 3}}>
-            3g. Guilds
-          </Typography>
-          <Typography sx={{color: 'text.secondary', mb: 2}}>
-            Enter the victory points from Guilds (purple cards).
-          </Typography>
-          <Stack spacing={2}>
-            {players.map((player, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                alignItems="center"
-                spacing={2}>
-                <Typography sx={{width: 120, flexShrink: 0}}>
-                  {player.name}
-                </Typography>
-                <ScoreInput
-                  value={guild.scores[index] || ''}
-                  onChange={(val) => guild.handleChange(index, val)}
-                  slotProps={{htmlInput: {min: 0}}}
-                />
-              </Stack>
-            ))}
-          </Stack>
+              </>
+            )}
+          </ScoringSection>
+          <ScoringSection
+            title="3f. Commercial Structures"
+            description="Some commercial structures from Age III grant victory points."
+            players={players}>
+            {(_, index) => (
+              <ScoreInput
+                value={commercial.scores[index] || ''}
+                onChange={(val) => commercial.handleChange(index, val)}
+                slotProps={{htmlInput: {min: 0}}}
+              />
+            )}
+          </ScoringSection>
+          <ScoringSection
+            title="3g. Guilds"
+            description="Enter the victory points from Guilds (purple cards)."
+            players={players}>
+            {(_, index) => (
+              <ScoreInput
+                value={guild.scores[index] || ''}
+                onChange={(val) => guild.handleChange(index, val)}
+                slotProps={{htmlInput: {min: 0}}}
+              />
+            )}
+          </ScoringSection>
           <ScoreSheet results={results} onCalculate={handleCalculateScores}>
             <TableContainer component={Paper}>
               <Table

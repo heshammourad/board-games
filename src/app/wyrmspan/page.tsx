@@ -8,9 +8,16 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Paper from '@mui/material/Paper';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Stack from '@mui/material/Stack';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import {ChangeEvent, SyntheticEvent, useState} from 'react';
@@ -19,6 +26,7 @@ import GamePageLayout from '../../components/GamePageLayout';
 import PlayerSetup, {Player} from '../../components/PlayerSetup';
 import ScoreInput from '../../components/ScoreInput';
 import ScoreSheet, {ScoreResult} from '../../components/ScoreSheet';
+import ScoringSection from '../../components/ScoringSection';
 import {useScores} from '../../hooks/useScores';
 import {pickMany, pickOne} from '../../utils/random';
 
@@ -176,7 +184,9 @@ export default function Page() {
         rank,
         playerName: item.player,
         score: item.score,
-        details: showTieBreaker ? `(${item.visibleDragons} dragons)` : undefined,
+        details: showTieBreaker
+          ? `(${item.visibleDragons} dragons)`
+          : undefined,
       };
     });
 
@@ -281,259 +291,150 @@ export default function Page() {
           <Typography sx={{width: '33%', flexShrink: 0}}>4. Scoring</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography variant="h6">4a. Markers on the Dragon Guild</Typography>
-          <Typography sx={{color: 'text.secondary', mb: 2}}>
-            Points from markers on the Dragon Guild
-          </Typography>
-          <Stack spacing={2}>
-            {players.map((player, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                alignItems="center"
-                spacing={2}>
-                <Typography sx={{width: 120, flexShrink: 0}}>
-                  {player.name}
-                </Typography>
-                <ScoreInput
-                  value={dragonGuild.scores[index] || ''}
-                  onChange={(val) => dragonGuild.handleChange(index, val)}
-                  slotProps={{htmlInput: {min: 0}}}
-                />
-              </Stack>
-            ))}
-          </Stack>
-          <Typography variant="h6" sx={{mt: 3}}>
-            4b. Printed VP Values
-          </Typography>
-          <Typography sx={{color: 'text.secondary', mb: 2}}>
-            Visible dragons on your player mat (not in hand and not tucked).
-          </Typography>
-          <Stack spacing={2}>
-            {players.map((player, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                alignItems="center"
-                spacing={2}>
-                <Typography sx={{width: 120, flexShrink: 0}}>
-                  {player.name}
-                </Typography>
-                <ScoreInput
-                  value={printedCard.scores[index] || ''}
-                  onChange={(val) => printedCard.handleChange(index, val)}
-                  slotProps={{htmlInput: {min: 0}}}
-                />
-              </Stack>
-            ))}
-          </Stack>
-          <Typography variant="h6" sx={{mt: 3}}>
-            4c. End Game Abilities
-          </Typography>
-          <Box sx={{display: 'flex', alignItems: 'center', mb: 2}}>
-            <Box
-              sx={{
-                bgcolor: 'grey.100',
-                borderRadius: 1,
-                p: 0.5,
-                mr: 1,
-                display: 'inline-flex',
-              }}>
+          <ScoringSection
+            title="4a. Markers on the Dragon Guild"
+            description="Points from markers on the Dragon Guild"
+            players={players}
+            sx={{mt: 0}}>
+            {(_, index) => (
+              <ScoreInput
+                value={dragonGuild.scores[index] || ''}
+                onChange={(val) => dragonGuild.handleChange(index, val)}
+                slotProps={{htmlInput: {min: 0}}}
+              />
+            )}
+          </ScoringSection>
+          <ScoringSection
+            title="4b. Printed VP Values"
+            description="Visible dragons on your player mat (not in hand and not tucked)."
+            players={players}>
+            {(_, index) => (
+              <ScoreInput
+                value={printedCard.scores[index] || ''}
+                onChange={(val) => printedCard.handleChange(index, val)}
+                slotProps={{htmlInput: {min: 0}}}
+              />
+            )}
+          </ScoringSection>
+          <ScoringSection
+            title="4c. End Game Abilities"
+            description="on visible dragons on your player mat (not in hand and not tucked)."
+            players={players}
+            icon={
               <Image
                 src="/wyrmspan/end_game.png"
                 alt="End Game"
                 width={24}
                 height={24}
               />
-            </Box>
-            <Typography color="text.secondary">
-              on visible dragons on your player mat (not in hand and not
-              tucked).
-            </Typography>
-          </Box>
-          <Stack spacing={2}>
-            {players.map((player, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                alignItems="center"
-                spacing={2}>
-                <Typography sx={{width: 120, flexShrink: 0}}>
-                  {player.name}
-                </Typography>
-                <ScoreInput
-                  value={endGameAbility.scores[index] || ''}
-                  onChange={(val) => endGameAbility.handleChange(index, val)}
-                  slotProps={{htmlInput: {min: 0}}}
-                />
+            }>
+            {(_, index) => (
+              <ScoreInput
+                value={endGameAbility.scores[index] || ''}
+                onChange={(val) => endGameAbility.handleChange(index, val)}
+                slotProps={{htmlInput: {min: 0}}}
+              />
+            )}
+          </ScoringSection>
+          <ScoringSection
+            title="4d. Eggs"
+            description="Gain 1 VP per egg, unless otherwise specified."
+            players={players}>
+            {(_, index) => (
+              <ScoreInput
+                value={egg.scores[index] || ''}
+                onChange={(val) => egg.handleChange(index, val)}
+                slotProps={{htmlInput: {min: 0}}}
+              />
+            )}
+          </ScoringSection>
+          <ScoringSection
+            title="4e. Cached Resources"
+            description="Gain 1 VP per cached resource, unless otherwise specified."
+            players={players}>
+            {(_, index) => (
+              <ScoreInput
+                value={cachedResource.scores[index] || ''}
+                onChange={(val) => cachedResource.handleChange(index, val)}
+                slotProps={{htmlInput: {min: 0}}}
+              />
+            )}
+          </ScoringSection>
+          <ScoringSection
+            title="4f. Tucked Cards"
+            description="Gain 1 VP per tucked dragon, unless otherwise specified."
+            players={players}>
+            {(_, index) => (
+              <ScoreInput
+                value={tuckedCard.scores[index] || ''}
+                onChange={(val) => tuckedCard.handleChange(index, val)}
+                slotProps={{htmlInput: {min: 0}}}
+              />
+            )}
+          </ScoringSection>
+          <ScoringSection
+            title="4g. Public Objectives"
+            description="Ties are friendly."
+            players={players}>
+            {(_, index) => (
+              <ScoreInput
+                value={publicObjective.scores[index] || ''}
+                onChange={(val) => publicObjective.handleChange(index, val)}
+                slotProps={{htmlInput: {min: 0}}}
+              />
+            )}
+          </ScoringSection>
+          <ScoringSection
+            title="4h. Excess Coins"
+            description="Gain 1 VP per coin you have remaining."
+            players={players}>
+            {(_, index) => (
+              <ScoreInput
+                value={excessCoin.scores[index] || ''}
+                onChange={(val) => excessCoin.handleChange(index, val)}
+                slotProps={{htmlInput: {min: 0}}}
+              />
+            )}
+          </ScoringSection>
+          <ScoringSection
+            title="4i. Excess Items"
+            description="Gain 1 VP for every 4 other items (in any combination: resources, dragon cards, and cave cards) that you have remaining. Round down."
+            players={players}
+            header={
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <Typography sx={{width: 120, flexShrink: 0}} />
+                <Box
+                  sx={{width: 60, display: 'flex', justifyContent: 'center'}}>
+                  <Image
+                    src="/wyrmspan/any_resource.png"
+                    alt="Resources"
+                    width={24}
+                    height={24}
+                  />
+                </Box>
+                <Box
+                  sx={{width: 60, display: 'flex', justifyContent: 'center'}}>
+                  <Image
+                    src="/wyrmspan/dragon_card.jpg"
+                    alt="Dragon Cards"
+                    width={24}
+                    height={24}
+                  />
+                </Box>
+                <Box
+                  sx={{width: 60, display: 'flex', justifyContent: 'center'}}>
+                  <Image
+                    src="/wyrmspan/cave_card.jpg"
+                    alt="Cave Cards"
+                    width={24}
+                    height={24}
+                  />
+                </Box>
+                <Typography>Total</Typography>
               </Stack>
-            ))}
-          </Stack>
-          <Typography variant="h6" sx={{mt: 3}}>
-            4d. Eggs
-          </Typography>
-          <Typography sx={{color: 'text.secondary', mb: 2}}>
-            Gain 1 VP per egg, unless otherwise specified.
-          </Typography>
-          <Stack spacing={2}>
-            {players.map((player, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                alignItems="center"
-                spacing={2}>
-                <Typography sx={{width: 120, flexShrink: 0}}>
-                  {player.name}
-                </Typography>
-                <ScoreInput
-                  value={egg.scores[index] || ''}
-                  onChange={(val) => egg.handleChange(index, val)}
-                  slotProps={{htmlInput: {min: 0}}}
-                />
-              </Stack>
-            ))}
-          </Stack>
-          <Typography variant="h6" sx={{mt: 3}}>
-            4e. Cached Resources
-          </Typography>
-          <Typography sx={{color: 'text.secondary', mb: 2}}>
-            Gain 1 VP per cached resource, unless otherwise specified.
-          </Typography>
-          <Stack spacing={2}>
-            {players.map((player, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                alignItems="center"
-                spacing={2}>
-                <Typography sx={{width: 120, flexShrink: 0}}>
-                  {player.name}
-                </Typography>
-                <ScoreInput
-                  value={cachedResource.scores[index] || ''}
-                  onChange={(val) => cachedResource.handleChange(index, val)}
-                  slotProps={{htmlInput: {min: 0}}}
-                />
-              </Stack>
-            ))}
-          </Stack>
-          <Typography variant="h6" sx={{mt: 3}}>
-            4f. Tucked Cards
-          </Typography>
-          <Typography sx={{color: 'text.secondary', mb: 2}}>
-            Gain 1 VP per tucked dragon, unless otherwise specified.
-          </Typography>
-          <Stack spacing={2}>
-            {players.map((player, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                alignItems="center"
-                spacing={2}>
-                <Typography sx={{width: 120, flexShrink: 0}}>
-                  {player.name}
-                </Typography>
-                <ScoreInput
-                  value={tuckedCard.scores[index] || ''}
-                  onChange={(val) => tuckedCard.handleChange(index, val)}
-                  slotProps={{htmlInput: {min: 0}}}
-                />
-              </Stack>
-            ))}
-          </Stack>
-          <Typography variant="h6" sx={{mt: 3}}>
-            4g. Public Objectives
-          </Typography>
-          <Typography sx={{color: 'text.secondary', mb: 2}}>
-            Ties are friendly.
-          </Typography>
-          <Stack spacing={2}>
-            {players.map((player, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                alignItems="center"
-                spacing={2}>
-                <Typography sx={{width: 120, flexShrink: 0}}>
-                  {player.name}
-                </Typography>
-                <ScoreInput
-                  value={publicObjective.scores[index] || ''}
-                  onChange={(val) => publicObjective.handleChange(index, val)}
-                  slotProps={{htmlInput: {min: 0}}}
-                />
-              </Stack>
-            ))}
-          </Stack>
-          <Typography variant="h6" sx={{mt: 3}}>
-            4h. Excess Coins
-          </Typography>
-          <Typography sx={{color: 'text.secondary', mb: 2}}>
-            Gain 1 VP per coin you have remaining.
-          </Typography>
-          <Stack spacing={2}>
-            {players.map((player, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                alignItems="center"
-                spacing={2}>
-                <Typography sx={{width: 120, flexShrink: 0}}>
-                  {player.name}
-                </Typography>
-                <ScoreInput
-                  value={excessCoin.scores[index] || ''}
-                  onChange={(val) => excessCoin.handleChange(index, val)}
-                  slotProps={{htmlInput: {min: 0}}}
-                />
-              </Stack>
-            ))}
-          </Stack>
-          <Typography variant="h6" sx={{mt: 3}}>
-            4i. Excess Items
-          </Typography>
-          <Typography sx={{color: 'text.secondary', mb: 2}}>
-            Gain 1 VP for every 4 other items (in any combination: resources,
-            dragon cards, and cave cards) that you have remaining. Round down.
-          </Typography>
-          <Stack spacing={2}>
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <Typography sx={{width: 120, flexShrink: 0}} />
-              <Box sx={{width: 60, display: 'flex', justifyContent: 'center'}}>
-                <Image
-                  src="/wyrmspan/any_resource.png"
-                  alt="Resources"
-                  width={24}
-                  height={24}
-                />
-              </Box>
-              <Box sx={{width: 60, display: 'flex', justifyContent: 'center'}}>
-                <Image
-                  src="/wyrmspan/dragon_card.jpg"
-                  alt="Dragon Cards"
-                  width={24}
-                  height={24}
-                />
-              </Box>
-              <Box sx={{width: 60, display: 'flex', justifyContent: 'center'}}>
-                <Image
-                  src="/wyrmspan/cave_card.jpg"
-                  alt="Cave Cards"
-                  width={24}
-                  height={24}
-                />
-              </Box>
-              <Typography>Total</Typography>
-            </Stack>
-            {players.map((player, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                alignItems="center"
-                spacing={2}>
-                <Typography sx={{width: 120, flexShrink: 0}}>
-                  {player.name}
-                </Typography>
+            }>
+            {(_, index) => (
+              <>
                 <ScoreInput
                   sx={{width: 60}}
                   value={excessResources.scores[index] || ''}
@@ -559,34 +460,178 @@ export default function Page() {
                     excessCaveCards.numericScores[index],
                   )}
                 </Typography>
-              </Stack>
-            ))}
-          </Stack>
-          <Typography variant="h6" sx={{mt: 3}}>
-            4j. Visible Dragons
-          </Typography>
-          <Typography sx={{color: 'text.secondary', mb: 2}}>
-            Used to break scoring ties.
-          </Typography>
-          <Stack spacing={2}>
-            {players.map((player, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                alignItems="center"
-                spacing={2}>
-                <Typography sx={{width: 120, flexShrink: 0}}>
-                  {player.name}
-                </Typography>
-                <ScoreInput
-                  value={visibleDragons.scores[index] || ''}
-                  onChange={(val) => visibleDragons.handleChange(index, val)}
-                  slotProps={{htmlInput: {min: 0}}}
-                />
-              </Stack>
-            ))}
-          </Stack>
-          <ScoreSheet results={results} onCalculate={handleCalculateScores} />
+              </>
+            )}
+          </ScoringSection>
+          <ScoringSection
+            title="4j. Visible Dragons"
+            description="Used to break scoring ties."
+            players={players}>
+            {(_, index) => (
+              <ScoreInput
+                value={visibleDragons.scores[index] || ''}
+                onChange={(val) => visibleDragons.handleChange(index, val)}
+                slotProps={{htmlInput: {min: 0}}}
+              />
+            )}
+          </ScoringSection>
+          <ScoreSheet results={results} onCalculate={handleCalculateScores}>
+            <TableContainer component={Paper}>
+              <Table
+                size="small"
+                sx={{
+                  border: '2px solid black',
+                  '& .MuiTableCell-root': {
+                    fontFamily:
+                      '"Ink Free", "Segoe Print", "Chalkboard SE", "Gochi Hand", cursive',
+                    color: 'grey.900',
+                    fontSize: '1.1rem',
+                    border: '2px solid black',
+                  },
+                }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell
+                      sx={{
+                        borderBottom: '3px double black',
+                        bgcolor: 'grey.300',
+                        fontFamily: 'sans-serif',
+                      }}
+                      align="left"
+                    />
+                    {players.map((p, i) => (
+                      <TableCell
+                        key={i}
+                        align="center"
+                        sx={{
+                          fontWeight: 'bold',
+                          borderBottom: '3px double black',
+                          bgcolor: 'grey.300',
+                        }}>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: 1,
+                          }}>
+                          <Box
+                            sx={{
+                              width: 12,
+                              height: 12,
+                              bgcolor:
+                                p.color ||
+                                PLAYER_COLORS[i % PLAYER_COLORS.length],
+                              borderRadius: '50%',
+                            }}
+                          />
+                          {p.name}
+                        </Box>
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {[
+                    {label: 'Dragon Guild', values: dragonGuild.numericScores},
+                    {label: 'Dragons', values: printedCard.numericScores},
+                    {
+                      label: (
+                        <Image
+                          src="/wyrmspan/end_game.png"
+                          alt="End Game"
+                          width={20}
+                          height={20}
+                        />
+                      ),
+                      values: endGameAbility.numericScores,
+                    },
+                    {label: 'Eggs', values: egg.numericScores},
+                    {
+                      label: 'Cached Resources',
+                      values: cachedResource.numericScores,
+                    },
+                    {label: 'Tucked Cards', values: tuckedCard.numericScores},
+                    {
+                      label: 'Public Objectives',
+                      values: publicObjective.numericScores,
+                    },
+                    {
+                      label: 'Coins & Items',
+                      values: players.map(
+                        (_, i) =>
+                          excessCoin.numericScores[i] +
+                          calculateExcessItemsScore(
+                            excessResources.numericScores[i],
+                            excessDragonCards.numericScores[i],
+                            excessCaveCards.numericScores[i],
+                          ),
+                      ),
+                    },
+                  ].map((row, idx) => (
+                    <TableRow key={idx}>
+                      <TableCell
+                        align="left"
+                        sx={{bgcolor: 'grey.300', fontFamily: 'sans-serif'}}>
+                        {row.label}
+                      </TableCell>
+                      {row.values.map((val, i) => (
+                        <TableCell
+                          key={i}
+                          align="center"
+                          sx={{
+                            bgcolor: idx % 2 === 0 ? 'grey.50' : 'grey.200',
+                          }}>
+                          {val}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                  <TableRow>
+                    <TableCell
+                      align="left"
+                      sx={{
+                        borderTop: '3px double black',
+                        fontWeight: 'bold',
+                        fontSize: '1.2rem',
+                        bgcolor: 'grey.300',
+                        fontFamily: 'sans-serif',
+                      }}>
+                      Σ
+                    </TableCell>
+                    {players.map((_, i) => {
+                      const total =
+                        dragonGuild.numericScores[i] +
+                        printedCard.numericScores[i] +
+                        endGameAbility.numericScores[i] +
+                        egg.numericScores[i] +
+                        cachedResource.numericScores[i] +
+                        tuckedCard.numericScores[i] +
+                        publicObjective.numericScores[i] +
+                        excessCoin.numericScores[i] +
+                        calculateExcessItemsScore(
+                          excessResources.numericScores[i],
+                          excessDragonCards.numericScores[i],
+                          excessCaveCards.numericScores[i],
+                        );
+                      return (
+                        <TableCell
+                          key={i}
+                          align="center"
+                          sx={{
+                            fontWeight: 'bold',
+                            borderTop: '3px double black',
+                            bgcolor: 'grey.300',
+                          }}>
+                          {total}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </ScoreSheet>
         </AccordionDetails>
       </Accordion>
     </GamePageLayout>
